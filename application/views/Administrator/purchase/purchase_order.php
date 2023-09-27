@@ -47,23 +47,23 @@
 	<div class="col-xs-12 col-md-12 col-lg-12" style="border-bottom:1px #ccc solid;margin-bottom:5px;">
 		<div class="row">
 			<div class="form-group">
-				<label class="col-sm-1 control-label no-padding-right"> বিল নং </label>
-				<div class="col-sm-2">
-					<input type="text" id="invoice" name="invoice" v-model="purchase.invoice" readonly style="height:26px;" />
+				<label class="col-sm-2 control-label no-padding-right"> বিল নং </label>
+				<div class="col-sm-3">
+					<input type="text" id="invoice" class="form-control" name="invoice" v-model="purchase.invoice" readonly />
 				</div>
 			</div>
 
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<label class="col-sm-2 control-label no-padding-right"> ক্রয়ের ব্রাঞ্চ </label>
 				<div class="col-sm-3">
 					<v-select id="branchDropdown" v-bind:options="branches" v-model="selectedBranch" label="Brunch_name" disabled></v-select>
 				</div>
-			</div>
+			</div> -->
 
 			<div class="form-group">
-				<label class="col-sm-1 control-label no-padding-right"> তারিখ </label>
-				<div class="col-sm-3">
-					<input class="form-control" id="purchaseDate" name="purchaseDate" type="date" v-model="purchase.purchaseDate" v-bind:disabled="userType == 'u' ? true : false" style="border-radius: 5px 0px 0px 5px !important;padding: 4px 6px 4px !important;width: 230px;" />
+				<label class="col-sm-2 control-label no-padding-right"> তারিখ </label>
+				<div class="col-sm-5">
+					<input class="form-control" id="purchaseDate" name="purchaseDate" type="date" v-model="purchase.purchaseDate" v-bind:disabled="userType == 'u' ? true : false" />
 				</div>
 			</div>
 		</div>

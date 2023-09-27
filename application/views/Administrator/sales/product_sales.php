@@ -60,20 +60,21 @@
 
 			<div class="form-group">
 				<label class="col-sm-1 control-label no-padding-right"> বিক্রয় বাই </label>
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					<v-select v-bind:options="employees" v-model="selectedEmployee" label="Employee_Name" placeholder="Select Employee"></v-select>
 				</div>
 			</div>
 
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<label class="col-sm-1 control-label no-padding-right"> বিক্রয় ব্রাঞ্চ </label>
 				<div class="col-sm-2">
 					<v-select id="branchDropdown" v-bind:options="branches" label="Brunch_name" v-model="selectedBranch" disabled></v-select>
 				</div>
-			</div>
+			</div> -->
 
 			<div class="form-group">
-				<div class="col-sm-3">
+				<label class="col-sm-1 control-label no-padding-right"> বিক্রয় তারিখ </label>
+				<div class="col-sm-4">
 					<input class="form-control" id="salesDate" type="date" v-model="sales.salesDate" v-bind:disabled="userType == 'u' ? true : false" />
 				</div>
 			</div>
