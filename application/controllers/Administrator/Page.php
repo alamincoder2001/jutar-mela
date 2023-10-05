@@ -1140,18 +1140,20 @@ class Page extends CI_Controller
 
     public function getMotherApiContent()
     {
-        $url = 'http://linktechbd.com/motherapi/index.php';
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HTTPGET, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response_json = curl_exec($ch);
-        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        // $url = 'http://linktechbd.com/motherapi/index.php';
+        // $ch = curl_init($url);
+        // curl_setopt($ch, CURLOPT_HTTPGET, true);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $response_json = curl_exec($ch);
+        // $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        // curl_close($ch);
 
-        if ($code == '200') {
-            echo $response_json;
-        } else {
-            echo '';
-        }
+        // if ($code == '200') {
+        //     echo $response_json;
+        // } else {
+        //     echo '';
+        // }
+        $TextMsg = "Welcome to POS Express Software. Support Phone Number is : +88 01981-800200, 01911-978897 | Make a Website for Your Organization , Call us at 01911-978897";
+        echo $TextMsg;
     }
 }
