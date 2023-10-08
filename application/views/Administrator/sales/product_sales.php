@@ -808,9 +808,6 @@
 					productPoint: this.selectedProduct.Product_Point
 				}
 
-				console.log(product, this.selectedSize, this.selectedProduct);
-				// return;
-
 				if (product.productId == '') {
 					alert('Select Product');
 					return;
@@ -957,7 +954,7 @@
 					return;
 				}
 				if (this.selectedCustomer.Customer_Type == 'G') {
-					if (+this.sales.due > 0) {
+					if (this.sales.due > 0) {
 						alert('General Customer Due Founded!');
 						return;
 					}
@@ -972,8 +969,6 @@
 					url = "/update_sales";
 					this.sales.previousDue = parseFloat((this.sales.previousDue - this.sales_due_on_update)).toFixed(2);
 				}
-
-				// console.log(this.selectedCustomer.Customer_Credit_Limit, this.sales.due, this.sales.previousDue);
 
 				// if (parseFloat(this.selectedCustomer.Customer_Credit_Limit) < (parseFloat(this.sales.due) + parseFloat(this.sales.previousDue))) {
 				// 	alert(`Customer credit limit (${this.selectedCustomer.Customer_Credit_Limit}) exceeded`);
@@ -998,8 +993,10 @@
 				if (this.selectedCustomer.Customer_Type == 'G') {
 					data.customer = this.selectedCustomer;
 				}
+
 				// console.log(data);
 				// return
+
 				axios.post(url, data).then(async res => {
 					let r = res.data;
 					if (r.success) {

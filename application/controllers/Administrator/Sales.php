@@ -77,6 +77,7 @@ class Sales extends CI_Controller
     {
         $res = ['success' => false, 'message' => ''];
         try {
+            $this->db->trans_begin();
             $data = json_decode($this->input->raw_input_stream);
 
             $invoice = $data->sales->invoiceNo;
@@ -183,9 +184,9 @@ class Sales extends CI_Controller
                     and branch_id = ?
                 ", [$cartProduct->quantity, $cartProduct->productId, $this->session->userdata('BRANCHid')]);
             }
-            $currentDue = $data->sales->previousDue + ($data->sales->total - $data->sales->paid);
             //Send sms
             if ($data->sales->sendSms == true) {
+                $currentDue = $data->sales->previousDue + ($data->sales->total - $data->sales->paid);
                 $customerInfo = $this->db->query("select * from tbl_customer where Customer_SlNo = ?", $customerId)->row();
                 $sendToName = $customerInfo->owner_name != '' ? $customerInfo->owner_name : $customerInfo->Customer_Name;
                 $currency = $this->session->userdata('Currency_Name');
@@ -195,8 +196,11 @@ class Sales extends CI_Controller
                 $this->sms->sendSms($recipient, $message);
             }
 
+            $this->db->trans_commit();
+
             $res = ['success' => true, 'message' => 'Sales Success', 'salesId' => $salesId];
         } catch (Exception $ex) {
+            $this->db->trans_rollback();
             $res = ['success' => false, 'message' => $ex->getMessage()];
         }
 
@@ -292,12 +296,7 @@ class Sales extends CI_Controller
                 c.Customer_Mobile,
                 c.Customer_Address,
                 e.Employee_Name,
-                br.Brunch_name,
-                (
-                    select ifnull(count(*), 0) from tbl_saledetails sd 
-                    where sd.SaleMaster_IDNo = 1
-                    and sd.Status != 'd'
-                ) as total_products
+                br.Brunch_name
             from tbl_salesmaster sm
             left join tbl_customer c on c.Customer_SlNo = sm.SalseCustomer_IDNo
             left join tbl_employee e on e.Employee_SlNo = sm.employee_id
@@ -315,13 +314,17 @@ class Sales extends CI_Controller
                     p.Product_Name,
                     pc.ProductCategory_Name
                 from tbl_saledetails sd
-                join tbl_product p on p.Product_SlNo = sd.Product_IDNo
-                join tbl_productcategory pc on pc.ProductCategory_SlNo = p.ProductCategory_ID
+                left join tbl_product p on p.Product_SlNo = sd.Product_IDNo
+                left join tbl_productcategory pc on pc.ProductCategory_SlNo = p.ProductCategory_ID
                 where sd.SaleMaster_IDNo = ?
                 and sd.Status != 'd'
             ", $sale->SaleMaster_SlNo)->result();
         }
-        $res['sales'] = $sales;
+        
+        $saleFilter = array_filter($sales, function($item){
+            return count($item->saleDetails) > 0;
+        });
+        $res['sales'] = array_values($saleFilter);
 
         $returnClauses = "";
         if (isset($data->customerId) && $data->customerId != '') {
@@ -383,9 +386,9 @@ class Sales extends CI_Controller
                     pc.ProductCategory_Name,
                     u.Unit_Name
                 from tbl_saledetails sd
-                join tbl_product p on p.Product_SlNo = sd.Product_IDNo
-                join tbl_productcategory pc on pc.ProductCategory_SlNo = p.ProductCategory_ID
-                join tbl_unit u on u.Unit_SlNo = p.Unit_ID
+                left join tbl_product p on p.Product_SlNo = sd.Product_IDNo
+                left join tbl_productcategory pc on pc.ProductCategory_SlNo = p.ProductCategory_ID
+                left join tbl_unit u on u.Unit_SlNo = p.Unit_ID
                 where sd.SaleMaster_IDNo = ?
             ", $data->salesId)->result();
 
@@ -441,6 +444,7 @@ class Sales extends CI_Controller
     {
         $res = ['success' => false, 'message' => ''];
         try {
+            $this->db->trans_begin();
             $data = json_decode($this->input->raw_input_stream);
             $salesId = $data->sales->salesId;
             $customerId = $data->sales->customerId;
@@ -539,8 +543,10 @@ class Sales extends CI_Controller
                 ", [$cartProduct->quantity, $cartProduct->productId, $this->session->userdata('BRANCHid')]);
             }
 
+            $this->db->trans_commit();
             $res = ['success' => true, 'message' => 'Sales Updated', 'salesId' => $salesId];
         } catch (Exception $ex) {
+            $this->db->trans_rollback();
             $res = ['success' => false, 'message' => $ex->getMessage()];
         }
 
