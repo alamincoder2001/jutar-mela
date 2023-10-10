@@ -320,8 +320,8 @@ class Sales extends CI_Controller
                 and sd.Status != 'd'
             ", $sale->SaleMaster_SlNo)->result();
         }
-        
-        $saleFilter = array_filter($sales, function($item){
+
+        $saleFilter = array_filter($sales, function ($item) {
             return count($item->saleDetails) > 0;
         });
         $res['sales'] = array_values($saleFilter);
