@@ -791,6 +791,11 @@
 				this.$refs.productPurchaseRate.type = this.$refs.productPurchaseRate.type == 'text' ? 'password' : 'text';
 			},
 			addToCart() {
+				if (this.selectedSize.Product_SlNo == '') {
+					alert("Select Size");
+					document.querySelector("#pSize [type='search']").focus();
+					return
+				}
 				let product = {
 					productId: this.selectedProduct.Product_SlNo,
 					productCode: this.selectedProduct.Product_Code,
